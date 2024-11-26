@@ -14,11 +14,12 @@ import { DatePicker } from "antd";
 import SelectCustom from "../../components/select/selectCustom/SelectCustom";
 import { skillsService } from "../../services/skills.service";
 import FormAddUser from "./components/formAddUser";
+import { pathDefault } from "../../common/path";
 
 const ManagerUser = () => {
   const handleNotification = useContext(NotificationContext);
   const [listNguoiDung, setListNguoiDung] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const layDanhSachNguoiDung = () => {
     nguoiDungService
@@ -35,22 +36,11 @@ const ManagerUser = () => {
     layDanhSachNguoiDung();
   }, []);
 
-  // useEffect(() => {
-  //   nguoiDungService
-  //     .layDanhSachNguoiDung()
-  //     .then((res) => {
-  //       console.log(res);
-  //       setListNguoiDung(res.data.content);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }, [listNguoiDung]);
+  /* title => Tiêu đề cột
+   dataIndex: "tênThuộcTínhTrongMảng" => trỏ tới thuộc tính nào để lấy dữ liệu
+   key => phân biệt giữa các cột */
   const columns = [
     {
-      // title => Tiêu đề cột
-      // dataIndex: "tênThuộcTínhTrongMảng" => trỏ tới thuộc tính nào để lấy dữ liệu
-      // key => phân biệt giữa các cột
       title: "ID",
       dataIndex: "id",
       key: "1",
@@ -133,6 +123,22 @@ const ManagerUser = () => {
   const onChange = (date, dateString) => {
     console.log(date, dateString);
   };
+
+  // THAO TÁC BẢO MẬT TRANG ADMIN: ở trang admin -> nếu không có dữ liệu sẽ bị trả về trang đăng nhập | nếu có dữ liệu: USER -> homePage và ADMIN -> admin
+  useEffect(() => {
+    // Kiểm tra: user đăng nhập chưa? (đã đăng nhập == dữ liệu được lưu LS)
+    const dataString = localStorage.getItem("userInfo"); //string | null
+    // Nếu chưa đăng nhập (dữ liệu ko có trong LS): chuyển về trang đăng nhập "/sign-in"
+    if (!dataString) {
+      window.location.href = pathDefault.signIn;
+    } else {
+      // Kiểm tra: role có phải là "ADMIN" không? Nếu đăng nhập rồi nhưng ko phải ADMIN: chuyển về trang chủ
+      const data = JSON.parse(dataString);
+      if (data.user.role !== "ADMIN") {
+        window.location.href = pathDefault.homePage;
+      }
+    }
+  }, []);
   return (
     <div className="space-y-3">
       {/* tiêu đề */}
@@ -161,7 +167,12 @@ const ManagerUser = () => {
         open={isModalOpen}
         footer={null}
       >
-        <FormAddUser />
+        <FormAddUser
+          handleCloseModal={() => {
+            setIsModalOpen(false);
+          }}
+          layDanhSachNguoiDung={layDanhSachNguoiDung}
+        />
       </Modal>
     </div>
   );

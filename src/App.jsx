@@ -1,40 +1,85 @@
 import { useRoutes } from "react-router-dom";
 import { pathDefault } from "./common/path";
-import HomeTemplate from "./templates/HomeTemplate/HomeTemplate";
-import SignIn from "./pages/SignIn/SignIn";
-import SignUp from "./pages/signUp/SignUp";
 import { Bounce, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { createContext } from "react";
-import AdminTemplate from "./templates/AdminTemplate/AdminTemplate";
-import ManagerUser from "./pages/managerUser/ManagerUser";
-import ManagerJob from "./pages/managerJob/ManagerJob";
-import ManagerComment from "./pages/managerComment/ManagerComment";
+import React, { createContext } from "react";
+import { Suspense } from "react";
+// import HomeTemplate from "./templates/HomeTemplate/HomeTemplate";
+// import SignIn from "./pages/SignIn/SignIn";
+// import SignUp from "./pages/signUp/SignUp";
+// import AdminTemplate from "./templates/AdminTemplate/AdminTemplate";
+// import ManagerUser from "./pages/managerUser/ManagerUser";
+// import ManagerJob from "./pages/managerJob/ManagerJob";
+// import ManagerComment from "./pages/managerComment/ManagerComment";
 
+// REACT LAZY: Component nào hiển thị -> Component đó được xử lý & tải lên (tránh việc lần đầu khi truy cập vào trang tất cả các Component đều được tải xuống hết)
+//  B1: Xoá lệnh import HomeTemplate from "./templates/HomeTemplate/HomeTemplate"
+//  B2: Tạo biến HomeTemplate gọi tới React.lazy() và truyền vào PT lazy 1 function trả về lệnh import Component HomeTemplate
+//  (Lúc này biến HomeTemplate đóng vai trò như Component HomeTemplate nhưng khi Componet HomeTemplate được hiển thị cho user thì chỉ mỗi Componet HomeTemplate này được tải lên)
+
+// Component <Suspense></Suspense>: Bọc lại toàn bộ Component nào đang sử dụng React.lazy() => hiển thị giao diện web LOADING thay thế cho 1 Component nào đó để đợi trước khi Component đó được tải về
+
+const HomeTemplate = React.lazy(() =>
+  import("./templates/HomeTemplate/HomeTemplate")
+);
+const SignIn = React.lazy(() => import("./pages/SignIn/SignIn"));
+const SignUp = React.lazy(() => import("./pages/signUp/SignUp"));
+const AdminTemplate = React.lazy(() =>
+  import("./templates/AdminTemplate/AdminTemplate")
+);
+const ManagerUser = React.lazy(() => import("./pages/managerUser/ManagerUser"));
+const ManagerJob = React.lazy(() => import("./pages/managerJob/ManagerJob"));
+const ManagerComment = React.lazy(() =>
+  import("./pages/managerComment/ManagerComment")
+);
 const arrRoutes = [
   {
     path: pathDefault.homePage,
-    element: <HomeTemplate />,
+    element: (
+      <Suspense fallback={<div>Vui lòng chờ trong giây lát</div>}>
+        <HomeTemplate />
+      </Suspense>
+    ),
   },
   {
     path: pathDefault.signIn,
-    element: <SignIn />,
+    element: (
+      <Suspense fallback={<div>Vui lòng chờ trong giây lát</div>}>
+        <SignIn />
+      </Suspense>
+    ),
   },
   {
     path: pathDefault.signUp,
-    element: <SignUp />,
+    element: (
+      <Suspense fallback={<div>Vui lòng chờ trong giây lát</div>}>
+        <SignUp />
+      </Suspense>
+    ),
   },
   {
     path: pathDefault.admin,
-    element: <AdminTemplate />,
+    element: (
+      <Suspense fallback={<div>Vui lòng chờ trong giây lát</div>}>
+        <AdminTemplate />
+      </Suspense>
+    ),
     children: [
       {
         index: true,
-        element: <ManagerUser />,
+        element: (
+          <Suspense fallback={<div>Vui lòng chờ trong giây lát</div>}>
+            <ManagerUser />
+          </Suspense>
+        ),
       },
       {
         path: "manager-user",
-        element: <ManagerUser />,
+        element: (
+          <Suspense fallback={<div>Vui lòng chờ trong giây lát</div>}>
+            <ManagerUser />
+          </Suspense>
+        ),
       },
       {
         path: "manager-job",
@@ -42,7 +87,11 @@ const arrRoutes = [
       },
       {
         path: "manager-comment",
-        element: <ManagerComment />,
+        element: (
+          <Suspense fallback={<div>Vui lòng chờ trong giây lát</div>}>
+            <ManagerComment />
+          </Suspense>
+        ),
       },
     ],
   },
@@ -68,6 +117,7 @@ function App() {
     });
   };
   //toast.error || toast.success || toast.warning || toast.info
+
   return (
     <>
       <NotificationContext.Provider value={handleNotification}>

@@ -8,8 +8,11 @@ import { useState } from "react";
 import { useFormik } from "formik";
 import { nguoiDungService } from "../../../services/nguoiDung.service";
 import { useContext } from "react";
+import { NotificationContext } from "../../../App";
 
-const FormAddUser = ({}) => {
+const FormAddUser = ({ layDanhSachNguoiDung, handleCloseModal }) => {
+  const handleNotification = useContext(NotificationContext);
+
   const [listSkills, setListSkills] = useState([]);
   const {
     handleSubmit,
@@ -38,6 +41,9 @@ const FormAddUser = ({}) => {
         .themNguoiDung(values)
         .then((res) => {
           console.log(res);
+          handleCloseModal();
+          layDanhSachNguoiDung();
+          handleNotification("success", "Thêm mới thành công");
         })
         .catch((err) => {
           console.log(err);

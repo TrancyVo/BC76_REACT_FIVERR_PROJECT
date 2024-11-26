@@ -18,8 +18,12 @@ import { useDebounce } from "use-debounce";
 import { useMemo } from "react";
 import "./headerTemplate.scss";
 import DropdownInputSearch from "../../../components/dropdownInputSearch/DropdownInputSearch";
+import useViewPort from "../../../hooks/useViewPort";
 
 const HeaderTemplate = () => {
+  // Viewport resize (Responsive)
+  const { width } = useViewPort();
+  console.log(width);
   // Chuyển hướng:
   const navigate = useNavigate();
   // Gọi state trong Redux store (tate đại diện cho reducer trong store trong file configStore.js)
@@ -101,25 +105,28 @@ const HeaderTemplate = () => {
             </Link>
 
             {/* SEARCH INPUT  */}
-            <Dropdown
-              open={openDropdown}
-              menu={{
-                items: itemListSearch,
-                onMouseLeave: () => {
-                  setOpenDropdown(false);
-                },
-              }}
-              overlayClassName="dropdown-suggest"
-            >
-              <div className="w-full">
-                <InputSearch
-                  placeholder={"What service are you looking for today?"}
-                  handleChangeKeyword={handleChangeKeyword}
-                  value={keyword}
-                  handelClickInputSearch={handelClickInputSearch}
-                />
-              </div>
-            </Dropdown>
+            {width > 576 && (
+              <Dropdown
+                open={openDropdown}
+                menu={{
+                  items: itemListSearch,
+                  onMouseLeave: () => {
+                    setOpenDropdown(false);
+                  },
+                }}
+                overlayClassName="dropdown-suggest"
+              >
+                <div className="w-full">
+                  <InputSearch
+                    placeholder={"What service are you looking for today?"}
+                    handleChangeKeyword={handleChangeKeyword}
+                    value={keyword}
+                    handelClickInputSearch={handelClickInputSearch}
+                  />
+                </div>
+              </Dropdown>
+            )}
+
             {/* <DropdownInputSearch /> */}
           </div>
 
