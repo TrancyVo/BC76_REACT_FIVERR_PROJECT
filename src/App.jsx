@@ -22,7 +22,7 @@ import { Suspense } from "react";
 const HomeTemplate = React.lazy(() =>
   import("./templates/HomeTemplate/HomeTemplate")
 );
-const SignIn = React.lazy(() => import("./pages/SignIn/SignIn"));
+const SignIn = React.lazy(() => import("./pages/signIn/SignIn"));
 const SignUp = React.lazy(() => import("./pages/signUp/SignUp"));
 const AdminTemplate = React.lazy(() =>
   import("./templates/AdminTemplate/AdminTemplate")
@@ -175,3 +175,11 @@ const handleNotification = (type, content) => {
   const value = useContext(NotificationContext);
   console.log(value);
 */
+/* ĐÓNG GÓI DỰ ÁN:
+- Control C
+- npm run build => bắt đầu quá trình build dự án => xuất hiện thư mục dist (thư mục này ko cần đẩy lên github vì sẽ được vercel build lại)
+- git add . | git commit -m "" | git push -u origin master
+- Vercel => Tạo dự án mới => Import dự án => Giữ nguyên tất cả trừ Project Name (nếu muốn thay đổi tên domain)
+- Lưu ý: Trong lúc chạy install Command để cài đặt node_module để build dự án => Nếu bị lỗi: bấm nút xanh để xoá + ghi đè lên:  npm i --force 
+- Deploy
+ */
