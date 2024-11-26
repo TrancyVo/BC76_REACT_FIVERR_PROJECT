@@ -13,7 +13,7 @@ import InputCustom from "../../components/input/inputCustom/InputCustom";
 import { DatePicker } from "antd";
 import SelectCustom from "../../components/select/selectCustom/SelectCustom";
 import { skillsService } from "../../services/skills.service";
-import FormAddUser from "./components/formAddUser";
+import FormAddUser from "./components/FormAddUser";
 import { pathDefault } from "../../common/path";
 
 const ManagerUser = () => {
